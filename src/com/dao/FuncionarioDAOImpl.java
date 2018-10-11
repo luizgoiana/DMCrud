@@ -2,9 +2,12 @@ package com.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.domain.Funcionario;
@@ -17,6 +20,9 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 	@Autowired
 	private	JdbcTemplate jdbcTemplate;
 	
+	@Autowired(required=true)
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
 	@Override
 	public void salvar(Funcionario funcionario) {
 		String query = "INSERT INTO tb_funcionarios(nome, idade, sexo) VALUES("
@@ -24,29 +30,29 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 				+ ":idade,"
 				+ ":sexo)";
 		
-		CustomMapSqlParameterSource parametros = new CustomMapSqlParameterSource();
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
 		parametros.addValue("nome", funcionario.getNome());
 		parametros.addValue("idade", funcionario.getIdade());
 		parametros.addValue("sexo", funcionario.getSexo());
 		
-		jdbcTemplate.update(query, parametros);
+		namedParameterJdbcTemplate.update(query, parametros);
 	}
 
 	@Override
 	public void atualizar(Funcionario funcionario) {
 		String query = "UPDATE tb_funcionarios SET"
-				+ "nome = :nome"
-				+ "idade = :idade"
-				+ "sexo= :sexo"
-				+ "WHERE id= :id";
+				+ " nome = :nome, "
+				+ " idade = :idade, "
+				+ " sexo = :sexo "
+				+ " WHERE id = :id ";
 	    
-		CustomMapSqlParameterSource parametros = new CustomMapSqlParameterSource();
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
 		parametros.addValue("id", funcionario.getId());
 		parametros.addValue("nome", funcionario.getNome());
 		parametros.addValue("idade", funcionario.getIdade());
 		parametros.addValue("sexo", funcionario.getSexo());
 		
-		getJdbcTemplate().update(query, parametros);
+		namedParameterJdbcTemplate.update(query, parametros);
 	}
 
 	@Override
@@ -64,19 +70,24 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 	}
 
 	public List<Funcionario> buscar(Funcionario funcionario) {
-		CustomMapSqlParameterSource parametros = new CustomMapSqlParameterSource();
-		parametros.addValue("id", funcionario.getId());
-		parametros.addValue("nome", funcionario.getNome());
-		parametros.addValue("idade", funcionario.getIdade());
-		parametros.addValue("sexo", funcionario.getSexo());
+		MapSqlParameterSource parametros = new MapSqlParameterSource()
+			.addValue("id", funcionario.getId())
+			.addValue("nome", funcionario.getNome());
 		
-		 String query = "SELECT * FROM tb_funcionarios WHERE ("
-		 		+ "id = :id "
-		 		+ "AND nome = :nome "
-		 		+ "AND idade = :idade"
-		 		+ "AND sexo = :sexo)";
+		 String query = "SELECT * FROM tb_funcionarios WHERE 1 = 1";
+		 		if (funcionario.getId() != null)
+		 			query.concat("AND id = :id ");
+		 		
+		 		if (funcionario.getNome() != null)
+			 		query.concat("AND nome = :nome ");
+		 		
+		 		if (funcionario.getIdade() != null)
+		 			query.concat("AND idade = :idade ");
+		 			
+		 		if (funcionario.getSexo() != null)
+		 			query.concat("AND sexo = :sexo ");
 		 
-		 List<Funcionario> funcionarios = getJdbcTemplate().query(query, new FuncionarioRowMapper(), parametros);
+		 List<Funcionario> funcionarios = namedParameterJdbcTemplate.query(query, parametros, new FuncionarioRowMapper());
 		 return funcionarios;
 	}
 
@@ -93,6 +104,14 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
+		return namedParameterJdbcTemplate;
+	}
+
+	public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 	
 	

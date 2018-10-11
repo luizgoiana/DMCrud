@@ -13,5 +13,7 @@ public interface FuncionarioDAO {
 	
 	public List<Funcionario> buscarTodos();
 	
+	public List<Funcionario> buscar(Funcionario funcionario);
+	
 	public Funcionario buscarPorId(Integer idFuncionario);
 }

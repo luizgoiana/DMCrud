@@ -32,10 +32,6 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 		return funcionario;
 	}
 	
-//	@Action(value = "salvarOuAtualizarFuncionario", results = {
-//			@Result(name="success ", location = "/funcionarios.jsp"),
-//			@Result(name="input ", location = "/funcionarios.jsp")
-//	})
 	public String salvarOuAtualizar()
 	{	
 		if (funcionario.getId() != null) {
@@ -43,6 +39,12 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 		} else {
 			funcionarioDaoComponent.salvar(funcionario);
 		}
+		return SUCCESS;
+	}
+	
+	public String buscar()
+	{
+		funcionarios = funcionarioDaoComponent.buscar(funcionario);
 		return SUCCESS;
 	}
 	
@@ -67,18 +69,6 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 		funcionario = funcionarioDaoComponent.buscarPorId(Integer.parseInt( request.getParameter("id")));
 		return SUCCESS;
 	}
-	
-	
-//	@Action(value = "olaMundo", results = {
-//			@Result(name="ok", location = "/outra.jsp")
-//	})
-//	public String execute() {
-//		System.out.println("Bem vindo ao Struts2");
-//		return "ok";
-//	}
-	
-
-	
 	
 	public Funcionario getFuncionario() {
 		return funcionario;
