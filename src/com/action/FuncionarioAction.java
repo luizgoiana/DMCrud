@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dao.FuncionarioDAO;
 import com.dao.FuncionarioDAOImpl;
@@ -22,26 +23,32 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 	
 	private Funcionario funcionario = new Funcionario();
 	private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
-	private FuncionarioDAO funcionarioDAO = new FuncionarioDAOImpl();
+	
+	@Autowired(required=true)
+	private FuncionarioDAO funcionarioDaoComponent;
 
 	@Override
 	public Funcionario getModel() {
 		return funcionario;
 	}
 	
+//	@Action(value = "salvarOuAtualizarFuncionario", results = {
+//			@Result(name="success ", location = "/funcionarios.jsp"),
+//			@Result(name="input ", location = "/funcionarios.jsp")
+//	})
 	public String salvarOuAtualizar()
 	{	
 		if (funcionario.getId() != null) {
-			funcionarioDAO.atualizar(funcionario);
+			funcionarioDaoComponent.atualizar(funcionario);
 		} else {
-			funcionarioDAO.salvar(funcionario);
+			funcionarioDaoComponent.salvar(funcionario);
 		}
 		return SUCCESS;
 	}
 	
 	public String listar()
 	{
-		funcionarios = funcionarioDAO.buscarTodos();
+		funcionarios = funcionarioDaoComponent.buscarTodos();
 		return SUCCESS;
 	}
 	
@@ -50,14 +57,14 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
 		Funcionario funcionario = new Funcionario();
 		funcionario.setId(Integer.parseInt( request.getParameter("id")));
-		funcionarioDAO.deletar(funcionario);
+		funcionarioDaoComponent.deletar(funcionario);
 		return SUCCESS;
 	}
 	
 	public String editar()
 	{
 		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-		funcionario = funcionarioDAO.buscarPorId(Integer.parseInt( request.getParameter("id")));
+		funcionario = funcionarioDaoComponent.buscarPorId(Integer.parseInt( request.getParameter("id")));
 		return SUCCESS;
 	}
 	

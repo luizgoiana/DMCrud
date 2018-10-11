@@ -2,9 +2,12 @@
 "-//Apache Software Fundation//DTD Struts Configuration 2.0//EN"
 "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
+	<constant name="struts.objectFactory" value="spring" />
 	<package name="default" extends="struts-default">
 		<action name="salvarOuAtualizarFuncionario" method="salvarOuAtualizar" class="com.action.FuncionarioAction">
 			<result name="success" type="redirectAction">listarFuncionario</result>
+			<result name="ERROR">/funcionarios.jsp</result>
+			<result name="input">/funcionarios.jsp</result>
 		</action>
 		<action name="listarFuncionario" method="listar" class="com.action.FuncionarioAction">
 			<result name="success">/funcionarios.jsp</result>

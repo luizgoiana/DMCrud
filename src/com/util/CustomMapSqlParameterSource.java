@@ -13,6 +13,8 @@ public class CustomMapSqlParameterSource extends MapSqlParameterSource {
 	public MapSqlParameterSource addValue(String paramName, Object value) {
 		if (value != null) {
 			super.addValue(paramName, value);
+		} else {
+			super.addValue(paramName, "");
 		}
 		return this;
 	}
