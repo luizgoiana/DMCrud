@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.domain.Funcionario;
+import com.domain.SexoEnum;
 
 public class FuncionarioRowMapper implements RowMapper<Funcionario>{
 
@@ -21,7 +22,7 @@ public class FuncionarioRowMapper implements RowMapper<Funcionario>{
 		funcionario.setId(rs.getInt(id));
 		funcionario.setNome(rs.getString(nome));
 		funcionario.setIdade(rs.getInt(idade));
-		funcionario.setSexo(rs.getInt(sexo));
+		funcionario.setSexo(SexoEnum.getFromValue(rs.getInt(sexo)));
 		
 		return funcionario;
 	}

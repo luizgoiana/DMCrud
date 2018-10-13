@@ -4,7 +4,7 @@ public class Funcionario extends AbstractEntity {
 
 	private String nome;
 	private Integer idade;
-	private Integer sexo; //FIXME transformar em enum
+	private SexoEnum sexo;
 	
 	public String getNome() {
 		return nome;
@@ -18,10 +18,10 @@ public class Funcionario extends AbstractEntity {
 	public void setIdade(Integer idade) {
 		this.idade = idade;
 	}
-	public Integer getSexo() {
+	public SexoEnum getSexo() {
 		return sexo;
 	}
-	public void setSexo(Integer sexo) {
+	public void setSexo(SexoEnum sexo) {
 		this.sexo = sexo;
 	}
 	

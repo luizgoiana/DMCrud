@@ -6,6 +6,7 @@
 	<package name="default" extends="struts-default">
 		<action name="salvarOuAtualizarFuncionario" method="salvarOuAtualizar" class="com.action.FuncionarioAction">
 			<result name="success" type="redirectAction">listarFuncionario</result>
+			<result name="input">/funcionarios.jsp</result>
 		</action>
 		<action name="listarFuncionario" method="listar" class="com.action.FuncionarioAction">
 			<result name="success">/funcionarios.jsp</result>
@@ -17,7 +18,7 @@
 			<result name="success" type="redirectAction">listarFuncionario</result>
 		</action>
 		<action name="buscarFuncionario" method="buscar" class="com.action.FuncionarioAction">
-			<result name="success" type="redirectAction">listarFuncionario</result>
+			<result name="success">/funcionarios.jsp</result>
 		</action>
 	</package>
 </struts>

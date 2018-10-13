@@ -33,7 +33,7 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 		MapSqlParameterSource parametros = new MapSqlParameterSource();
 		parametros.addValue("nome", funcionario.getNome());
 		parametros.addValue("idade", funcionario.getIdade());
-		parametros.addValue("sexo", funcionario.getSexo());
+		parametros.addValue("sexo", funcionario.getSexo().getChave());
 		
 		namedParameterJdbcTemplate.update(query, parametros);
 	}
@@ -50,7 +50,7 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 		parametros.addValue("id", funcionario.getId());
 		parametros.addValue("nome", funcionario.getNome());
 		parametros.addValue("idade", funcionario.getIdade());
-		parametros.addValue("sexo", funcionario.getSexo());
+		parametros.addValue("sexo", funcionario.getSexo().getChave());
 		
 		namedParameterJdbcTemplate.update(query, parametros);
 	}
@@ -64,7 +64,7 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 
 	@Override
 	public List<Funcionario> buscarTodos() {
-		 String query = "SELECT * FROM tb_funcionarios";
+		 String query = "SELECT * FROM tb_funcionarios ORDER BY nome asc";
 		 List<Funcionario> funcionarios = getJdbcTemplate().query(query, new FuncionarioRowMapper());
 		 return funcionarios;
 	}
@@ -72,20 +72,22 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 	public List<Funcionario> buscar(Funcionario funcionario) {
 		MapSqlParameterSource parametros = new MapSqlParameterSource()
 			.addValue("id", funcionario.getId())
-			.addValue("nome", funcionario.getNome());
+			.addValue("nome", "%"+funcionario.getNome()+"%")
+			.addValue("idade", funcionario.getIdade())
+			.addValue("sexo", funcionario.getSexo().getChave());
 		
 		 String query = "SELECT * FROM tb_funcionarios WHERE 1 = 1";
 		 		if (funcionario.getId() != null)
-		 			query.concat("AND id = :id ");
+		 			query = query.concat(" AND id = :id ");
 		 		
 		 		if (funcionario.getNome() != null)
-			 		query.concat("AND nome = :nome ");
+		 			query = query.concat(" AND nome like :nome ");
 		 		
 		 		if (funcionario.getIdade() != null)
-		 			query.concat("AND idade = :idade ");
+		 			query = query.concat(" AND idade = :idade ");
 		 			
 		 		if (funcionario.getSexo() != null)
-		 			query.concat("AND sexo = :sexo ");
+		 			query = query.concat(" AND sexo = :sexo ");
 		 
 		 List<Funcionario> funcionarios = namedParameterJdbcTemplate.query(query, parametros, new FuncionarioRowMapper());
 		 return funcionarios;

@@ -16,18 +16,21 @@
 		<s:textfield name="funcionario.id" readonly="true"/>
 		<s:textfield name="funcionario.nome" label="Nome do Funcionario" />
 		<s:textfield name="funcionario.idade" label="Idade do Funcionario" />
+		<s:select name="sexo" list="sexoArray" listValue="descricao" listKey="chave" 
+        	headerKey="" headerValue="Select" 
+            label="Informe o sexo" />
 		
 		<s:submit value="Gravar" onclick="formHandle(1)"/>
 		<s:submit value="Pesquisar" onclick="formHandle(2)" />
-		<s:submit value="Cancelar"/>
+		<s:reset type="button" value="Cancelar"/>
 </s:form>
 
 <script>
  function formHandle(op) {
 		if (op == 1) {
-			document.getElementById("funcionarioForm").getAttribute("action") = "salvarOuAtualizarFuncionario";
+			document.getElementById("funcionarioForm").setAttribute("action", "/CrudStruts/salvarOuAtualizarFuncionario");
 		} else {
-			document.getElementById("funcionarioForm").getAttribute("action") = "buscarFuncionario";
+			document.getElementById("funcionarioForm").setAttribute("action", "/CrudStruts/buscarFuncionario");
 		}
 	}
 </script>
