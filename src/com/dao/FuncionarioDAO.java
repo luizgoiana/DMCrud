@@ -5,15 +5,13 @@ import java.util.List;
 import com.domain.Funcionario;
 
 public interface FuncionarioDAO {
-	public void salvar(Funcionario funcionario);
+	public void save(Funcionario funcionario);
 	
-	public void atualizar(Funcionario funcionario);
+	public void update(Funcionario funcionario);
 	
-	public void deletar (Funcionario funcionario);
+	public void delete (Funcionario funcionario);
 	
-	public List<Funcionario> buscarTodos();
+	public List<Funcionario> findAll();
 	
-	public List<Funcionario> buscar(Funcionario funcionario);
-	
-	public Funcionario buscarPorId(Integer idFuncionario);
+	public List<Funcionario> find(Funcionario funcionario);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
@@ -18,6 +19,7 @@ import com.domain.SexoEnum;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
+import com.service.FuncionarioService;
 
 public class FuncionarioAction extends ActionSupport implements ModelDriven<Funcionario> {
 
@@ -27,60 +29,60 @@ public class FuncionarioAction extends ActionSupport implements ModelDriven<Func
 	private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
 	
 	private SexoEnum[] sexoArray = SexoEnum.values();
-
-	@Autowired(required=true)
-	private FuncionarioDAO funcionarioDaoComponent;
+	
+	@Autowired()
+	private FuncionarioService funcionarioServiceComponent;
+	
+	
 
 	@Override
 	public Funcionario getModel() {
 		return funcionario;
 	}
 	
-	public String salvarOuAtualizar()
+	public String saveOrUpdate()
 	{	
-		if (funcionario.getId() != null) {
-			funcionarioDaoComponent.atualizar(funcionario);
-		} else {
-			funcionarioDaoComponent.salvar(funcionario);
-		}
+		funcionarioServiceComponent.saveOrUpdate(funcionario);
 		return SUCCESS;
 	}
 	
 	@SkipValidation
-	public String buscar()
+	public String find()
 	{
-		funcionarios = funcionarioDaoComponent.buscar(funcionario);
+		funcionarios = funcionarioServiceComponent.find(funcionario);
 		return SUCCESS;
 	}
 	
 	@SkipValidation
-	public String listar()
+	public String list()
 	{
-		funcionarios = funcionarioDaoComponent.buscarTodos();
+		funcionarios = funcionarioServiceComponent.findAll();
 		return SUCCESS;
 	}
 	
 	@SkipValidation
-	public String deletar()
+	public String delete()
 	{
 		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-		Funcionario funcionario = new Funcionario();
-		funcionario.setId(Integer.parseInt( request.getParameter("id")));
-		funcionarioDaoComponent.deletar(funcionario);
+		funcionarioServiceComponent.deleteById(Integer.parseInt(request.getParameter("id")));
 		return SUCCESS;
 	}
 	
 	@SkipValidation
-	public String editar()
+	public String edit()
 	{
 		HttpServletRequest request = (HttpServletRequest) ActionContext.getContext().get( ServletActionContext.HTTP_REQUEST);
-		funcionario = funcionarioDaoComponent.buscarPorId(Integer.parseInt( request.getParameter("id")));
+		funcionario = funcionarioServiceComponent.findById(Integer.parseInt( request.getParameter("id")));
 		return SUCCESS;
 	}
 	
 	public void validate(){
 	    if (funcionario.getNome().length() == 0) {
 	        addFieldError("funcionario.nome", "O nome é obrigatório.");
+	    }
+	    
+	    if (funcionario.getNome().length() >= 40) {
+	        addFieldError("funcionario.nome", "Informe um nome com até 40 caracteres");
 	    }
 	}
 	

@@ -1,0 +1,10 @@
+-Escolhi uma arquitetura simples, porém escalável.
+
+-O Spring possui funcionalidades muito boas para lidar diretamente com JDBC, toda a camada de acesso a dados foi implementada com base no Spring JdbcTemplate. O mapeamento objeto relacional foi feito por uma classe RowMapper.
+
+-Como incluí o Spring no projeto, resolvi deixar o mesmo a cargo também da Injeção de Dependências (no lugar do EJB ou CDI).
+
+-Usei de Annotations na maior parte do tempo, quanto no que tange ao Struts2 quanto ao Spring. Porém algumas coisas ficam mais clean configuradas por XML (em minha opinião, claro), como as actions do Struts e a configuração da parte de acesso a banco do Spring.
+
+
+-Commitei todos os jar's, necessário apenas instalar o MySQL Server versão 8.0.12 e MySQL Java Connector também na versão 8.0.12. O script para criação do banco de dados está na pasta /etc - junto ao driver JDBC que utilizei.

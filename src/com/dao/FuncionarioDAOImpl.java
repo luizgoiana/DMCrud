@@ -2,19 +2,16 @@ package com.dao;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.domain.Funcionario;
 import com.rowmapper.FuncionarioRowMapper;
-import com.util.CustomMapSqlParameterSource;
 
-@Component(value="funcionarioDaoComponent")
+@Repository(value="funcionarioDaoRepository")
 public class FuncionarioDAOImpl implements FuncionarioDAO {
 
 	@Autowired
@@ -23,23 +20,26 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 	@Autowired(required=true)
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
+	@Autowired
+	FuncionarioRowMapper funcionarioRowMapper;
+	
 	@Override
-	public void salvar(Funcionario funcionario) {
+	public void save(Funcionario funcionario) {
 		String query = "INSERT INTO tb_funcionarios(nome, idade, sexo) VALUES("
 				+ ":nome,"
 				+ ":idade,"
 				+ ":sexo)";
 		
 		MapSqlParameterSource parametros = new MapSqlParameterSource();
-		parametros.addValue("nome", funcionario.getNome());
-		parametros.addValue("idade", funcionario.getIdade());
-		parametros.addValue("sexo", funcionario.getSexo().getChave());
+		parametros.addValue("nome", funcionario.getNome())
+			.addValue("idade", funcionario.getIdade())
+			.addValue("sexo", funcionario.getSexo() != null ? funcionario.getSexo().getChave() : null);
 		
 		namedParameterJdbcTemplate.update(query, parametros);
 	}
 
 	@Override
-	public void atualizar(Funcionario funcionario) {
+	public void update(Funcionario funcionario) {
 		String query = "UPDATE tb_funcionarios SET"
 				+ " nome = :nome, "
 				+ " idade = :idade, "
@@ -47,34 +47,34 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 				+ " WHERE id = :id ";
 	    
 		MapSqlParameterSource parametros = new MapSqlParameterSource();
-		parametros.addValue("id", funcionario.getId());
-		parametros.addValue("nome", funcionario.getNome());
-		parametros.addValue("idade", funcionario.getIdade());
-		parametros.addValue("sexo", funcionario.getSexo().getChave());
+		parametros.addValue("id", funcionario.getId())
+			.addValue("nome", funcionario.getNome())
+			.addValue("idade", funcionario.getIdade())
+			.addValue("sexo", funcionario.getSexo() != null ? funcionario.getSexo().getChave() : null);
 		
 		namedParameterJdbcTemplate.update(query, parametros);
 	}
 
 	@Override
-	public void deletar(Funcionario funcionario) {
+	public void delete(Funcionario funcionario) {
 		String query = "DELETE FROM tb_funcionarios WHERE id = ?";
 		getJdbcTemplate().update(query, funcionario.getId());
 		
 	}
 
 	@Override
-	public List<Funcionario> buscarTodos() {
+	public List<Funcionario> findAll() {
 		 String query = "SELECT * FROM tb_funcionarios ORDER BY nome asc";
-		 List<Funcionario> funcionarios = getJdbcTemplate().query(query, new FuncionarioRowMapper());
+		 List<Funcionario> funcionarios = getJdbcTemplate().query(query, funcionarioRowMapper);
 		 return funcionarios;
 	}
 
-	public List<Funcionario> buscar(Funcionario funcionario) {
+	public List<Funcionario> find(Funcionario funcionario) {
 		MapSqlParameterSource parametros = new MapSqlParameterSource()
 			.addValue("id", funcionario.getId())
 			.addValue("nome", "%"+funcionario.getNome()+"%")
 			.addValue("idade", funcionario.getIdade())
-			.addValue("sexo", funcionario.getSexo().getChave());
+			.addValue("sexo", funcionario.getSexo() != null ? funcionario.getSexo().getChave() : null);
 		
 		 String query = "SELECT * FROM tb_funcionarios WHERE 1 = 1";
 		 		if (funcionario.getId() != null)
@@ -89,15 +89,8 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
 		 		if (funcionario.getSexo() != null)
 		 			query = query.concat(" AND sexo = :sexo ");
 		 
-		 List<Funcionario> funcionarios = namedParameterJdbcTemplate.query(query, parametros, new FuncionarioRowMapper());
+		 List<Funcionario> funcionarios = namedParameterJdbcTemplate.query(query, parametros, funcionarioRowMapper);
 		 return funcionarios;
-	}
-
-	@Override
-	public Funcionario buscarPorId(Integer idFuncionario) {
-		Funcionario funcionario = new Funcionario();
-		funcionario.setId(idFuncionario);
-		return buscar(funcionario).get(0);
 	}
 
 	public JdbcTemplate getJdbcTemplate() {

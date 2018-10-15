@@ -4,20 +4,20 @@
 <struts>
 	<constant name="struts.objectFactory" value="spring" />
 	<package name="default" extends="struts-default">
-		<action name="salvarOuAtualizarFuncionario" method="salvarOuAtualizar" class="com.action.FuncionarioAction">
+		<action name="salvarOuAtualizarFuncionario" method="saveOrUpdate" class="com.action.FuncionarioAction">
 			<result name="success" type="redirectAction">listarFuncionario</result>
 			<result name="input">/funcionarios.jsp</result>
 		</action>
-		<action name="listarFuncionario" method="listar" class="com.action.FuncionarioAction">
+		<action name="listarFuncionario" method="list" class="com.action.FuncionarioAction">
 			<result name="success">/funcionarios.jsp</result>
 		</action>
-		<action name="editarFuncionario" method="editar" class="com.action.FuncionarioAction">
+		<action name="editarFuncionario" method="edit" class="com.action.FuncionarioAction">
 			<result name="success">/funcionarios.jsp</result>
 		</action>
-		<action name="deletarFuncionario" method="deletar" class="com.action.FuncionarioAction">
+		<action name="deletarFuncionario" method="delete" class="com.action.FuncionarioAction">
 			<result name="success" type="redirectAction">listarFuncionario</result>
 		</action>
-		<action name="buscarFuncionario" method="buscar" class="com.action.FuncionarioAction">
+		<action name="buscarFuncionario" method="find" class="com.action.FuncionarioAction">
 			<result name="success">/funcionarios.jsp</result>
 		</action>
 	</package>

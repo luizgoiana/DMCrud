@@ -24,5 +24,8 @@ public class Funcionario extends AbstractEntity {
 	public void setSexo(SexoEnum sexo) {
 		this.sexo = sexo;
 	}
+	public void setSexo(Object sexo) {
+		this.sexo = SexoEnum.getFromValue(Integer.parseInt(((String[])sexo)[0]));
+	}
 	
 }
