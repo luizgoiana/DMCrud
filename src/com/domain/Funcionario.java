@@ -1,5 +1,7 @@
 package com.domain;
 
+import com.opensymphony.xwork2.conversion.annotations.TypeConversion;
+
 public class Funcionario extends AbstractEntity {
 
 	private String nome;
@@ -18,14 +20,15 @@ public class Funcionario extends AbstractEntity {
 	public void setIdade(Integer idade) {
 		this.idade = idade;
 	}
+	
+	@TypeConversion(converterClass=com.converter.SexoConverter.class)
 	public SexoEnum getSexo() {
 		return sexo;
 	}
+	
+	@TypeConversion(converterClass=com.converter.SexoConverter.class)
 	public void setSexo(SexoEnum sexo) {
 		this.sexo = sexo;
-	}
-	public void setSexo(Object sexo) {
-		this.sexo = SexoEnum.getFromValue(Integer.parseInt(((String[])sexo)[0]));
 	}
 	
 }

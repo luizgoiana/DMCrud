@@ -18,7 +18,7 @@
 			<s:textfield name="funcionario.nome" label="Nome do Funcionario" class="input name"/>
 			<s:textfield name="funcionario.idade" label="Idade do Funcionario" />
 			<s:select name="funcionario.sexo" list="sexoArray" listValue="descricao" listKey="chave" 
-	        	headerValue="Selecione.." value="funcionario.sexo.chave"
+	        	headerValue="Select" value="funcionario.sexo.chave"
 	            label="Informe o sexo" />
 			
 			<s:submit value="Gravar" onclick="formHandle(1)"/>
