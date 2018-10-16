@@ -1,3 +1,5 @@
+URL Inicial: http://localhost:8080/CrudStruts/listarFuncionario.action
+
 -Escolhi uma arquitetura simples, porém escalável.
 
 -O Spring possui funcionalidades muito boas para lidar diretamente com JDBC, toda a camada de acesso a dados foi implementada com base no Spring JdbcTemplate. O mapeamento objeto relacional foi feito por uma classe RowMapper.
